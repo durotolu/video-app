@@ -7,6 +7,11 @@ const port = process.env.PORT || 3000
 app.use(express.static(__dirname + '/frontend/client/public'))
 let clients = 0
 
+app.get('/', (req, res) => {
+  res.json('dffgg')
+  res.sendFile(__dirname + '/frontend/client/public/index.html')
+})
+
 io.on('connection', function(socket) {
   socket.on("NewClient", function() {
     if(clients < 2) {
