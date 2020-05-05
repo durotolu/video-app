@@ -1,0 +1,26 @@
+{
+  "name": "video-app",
+  "version": "1.0.0",
+  "description": "A video chat app",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0",
+    "simple-peer": "^9.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/durotolu/video-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/durotolu/video-app/issues"
+  },
+  "homepage": "https://github.com/durotolu/video-app#readme"
+}
