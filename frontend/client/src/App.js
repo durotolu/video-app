@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import io from 'socket.io-client';
@@ -8,8 +8,10 @@ const socket = io('http://localhost:4000')
 
 function App() {
 
-  const [streamData, setStreamData] = useState({})
+  // const [streamData, setStreamData] = useState({})
   const [peerVideo, setPeerVideo] = useState(true)
+  // const [video, setVideo] = useState(true)
+  let streamDataREf = useRef()
   let client = {}
 
   useEffect(() =>{
@@ -17,9 +19,12 @@ function App() {
     // get stream
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then(stream => {
-      socket.emit('NewClient')
+      socket.emit('NewClient');
+
+      streamDataREf.current.srcObject = stream
+      // setVideo(streamDataREf);
       // video.srcObject = stream;
-      setStreamData(stream)
+      // setStreamData(stream)
 
       // to initialize a peer
       function initPeer(type) {
@@ -76,18 +81,20 @@ function App() {
       
     })
     .catch(err => {
-      debugger
       console.log('swag', err)
     })
   }, [])
     
     return (
     <div className="App">
-      <header className="App-header">
+      <header >
+         {/* className="App-header"> */}
         <div className="row">
           <div className="video-container">
             <div className="embed-responsive">
-              <video ref={streamData} className="embed-responsive-item" muted autoPlay></video>
+              <video width='400px' ref={streamDataREf} className="embed-responsive-item" muted autoPlay>
+                {/* <source src={streamData} /> */}
+              </video>
             </div>
           </div>
           <div className="video-container">
