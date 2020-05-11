@@ -6,11 +6,10 @@ const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const port = process.env.PORT
 
-app.use(express.static(__dirname + '/frontend/client/public'))
+app.use(express.static(__dirname + '/frontend/client/build'))
 let clients = 0
 
 app.get('/', (req, res) => {
-  res.json('dffgg')
   res.sendFile(__dirname + '/frontend/client/public/index.html')
 })
 
