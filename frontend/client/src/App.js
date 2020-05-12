@@ -4,9 +4,9 @@ import './App.css';
 import io from 'socket.io-client';
 import Peer from 'simple-peer';
 
-const socket = io('http://localhost:4000')
 
 function App() {
+  const socket = io.connect('http://localhost:4000')
   // const [streamData, setStreamData] = useState({})
   const [peerVideo, setPeerVideo] = useState(true)
   // const [video, setVideo] = useState(true)
@@ -23,14 +23,14 @@ function App() {
 
       streamDataREf.current.srcObject = stream
 
-      // to initialize a peer
+      // used to initialize a peer
       function initPeer(type) {
         let peer = new Peer({ initiator: (type === 'init') ? true : false, stream: stream, trickle: false })
         peer.on('stream', function (stream) {
           createVideo(stream)
         })
         peer.on('close', function () {
-          //
+          peerStreamDataRef.connect.srcObject = null
           peer.destroy()
         })
         return peer
@@ -41,8 +41,9 @@ function App() {
         client.gotAnswer = false
         let peer = initPeer('init')
         peer.on('signal', function(data) {
+          debugger
           if(!client.gotAnswer) {
-            socket.emit('offer', data)
+            socket.emit('Offer', data)
           }
         })
         client.peer = peer
@@ -50,7 +51,8 @@ function App() {
 
       // for peer of type not init
       function frontAnswer(offer) {
-        let peer = initPeer('not init')
+        console.log(offer)
+        let peer = initPeer('notinit')
         peer.on('signal', (data) => {
           socket.emit('Answer', data)
         })
@@ -58,6 +60,7 @@ function App() {
       }
       
       function signalAnswer(answer) {
+        debugger
         client.gotAnswer = true
         let peer = client.peer
         peer.signal(answer)
@@ -77,6 +80,7 @@ function App() {
       socket.on('BackAnswer', signalAnswer)
       socket.on('SessionActive', sessionActive)
       socket.on('CreatePeer', makePeer)
+      // socket.on('RemoveVideo', RemoveVideo)
       
     })
     .catch(err => {
