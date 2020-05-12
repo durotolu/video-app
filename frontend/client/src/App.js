@@ -7,11 +7,11 @@ import Peer from 'simple-peer';
 const socket = io('http://localhost:4000')
 
 function App() {
-
   // const [streamData, setStreamData] = useState({})
   const [peerVideo, setPeerVideo] = useState(true)
   // const [video, setVideo] = useState(true)
   let streamDataREf = useRef()
+  let peerStreamDataRef = useRef()
   let client = {}
 
   useEffect(() =>{
@@ -22,9 +22,6 @@ function App() {
       socket.emit('NewClient');
 
       streamDataREf.current.srcObject = stream
-      // setVideo(streamDataREf);
-      // video.srcObject = stream;
-      // setStreamData(stream)
 
       // to initialize a peer
       function initPeer(type) {
@@ -68,6 +65,8 @@ function App() {
       
       function createVideo(stream) {
         setPeerVideo(false)
+        peerStreamDataRef.current.srcObject = stream
+        console.log(70, stream, peerStreamDataRef)
       }
       
       function sessionActive() {
@@ -87,19 +86,17 @@ function App() {
     
     return (
     <div className="App">
-      <header >
-         {/* className="App-header"> */}
+      <header className="App-header">
         <div className="row">
           <div className="video-container">
-            <div className="embed-responsive">
+            <div className="embed-responsive">fd
               <video width='400px' ref={streamDataREf} className="embed-responsive-item" muted autoPlay>
-                {/* <source src={streamData} /> */}
-              </video>
+              </video>h
             </div>
           </div>
           <div className="video-container">
-            <div className="embed-responsive">
-              <video hidden={peerVideo} className="embed-responsive-item" autoPlay></video>
+            <div className="embed-responsive">gh
+              <video width='400px' ref={peerStreamDataRef} className="embed-responsive-item" autoPlay></video>
             </div>
           </div>
         </div>
