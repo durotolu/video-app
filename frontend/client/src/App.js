@@ -31,6 +31,7 @@ function App() {
         })
         peer.on('close', function () {
           peerStreamDataRef.connect.srcObject = null
+          socket.emit('Disconnect')
           peer.destroy()
         })
         return peer
