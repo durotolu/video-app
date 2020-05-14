@@ -67,9 +67,9 @@ function App() {
       }
       
       function createVideo(stream) {
+        debugger
         setPeerVideo(false)
         peerStreamDataRef.current.srcObject = stream
-        console.log(70, stream, peerStreamDataRef)
       }
       
       function sessionActive() {
@@ -93,13 +93,13 @@ function App() {
       <header className="App-header">
         <div className="row">
           <div className="video-container">
-            <div className="embed-responsive">fd
+            <div className="embed-responsive">
               <video width='400px' ref={streamDataREf} className="embed-responsive-item" muted autoPlay>
-              </video>h
+              </video>
             </div>
           </div>
           <div className="video-container">
-            <div className="embed-responsive">gh
+            <div className="embed-responsive">
               <video width='400px' ref={peerStreamDataRef} className="embed-responsive-item" autoPlay></video>
             </div>
           </div>
