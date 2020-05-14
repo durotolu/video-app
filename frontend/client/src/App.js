@@ -26,11 +26,12 @@ function App() {
       // used to initialize a peer
       function initPeer(type) {
         let peer = new Peer({ initiator: (type === 'init') ? true : false, stream: stream, trickle: false })
-        peer.on('stream', function (stream) {
-          createVideo(stream)
+        peer.on('stream', function (peerStream) {
+          createVideo(peerStream)
         })
         peer.on('close', function () {
           peerStreamDataRef.connect.srcObject = null
+          // socket.emit('Disconnect')
           peer.destroy()
         })
         return peer
@@ -51,7 +52,6 @@ function App() {
 
       // for peer of type not init
       function frontAnswer(offer) {
-        console.log(offer)
         let peer = initPeer('notinit')
         peer.on('signal', (data) => {
           socket.emit('Answer', data)
