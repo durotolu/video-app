@@ -1,0 +1,35 @@
+{
+  "name": "video-app",
+  "version": "1.0.0",
+  "description": "A video chat app",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "simple-peer": "^9.7.0",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.19.0"
+  },
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "v10.16.1",
+    "npm": "6.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/durotolu/video-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/durotolu/video-app/issues"
+  },
+  "homepage": "https://github.com/durotolu/video-app#readme"
+}
