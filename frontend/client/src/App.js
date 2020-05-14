@@ -6,7 +6,7 @@ import Peer from 'simple-peer';
 
 
 function App() {
-  const socket = io.connect('http://localhost:4000')
+  const socket = io()
   // const [streamData, setStreamData] = useState({})
   const [peerVideo, setPeerVideo] = useState(true)
   // const [video, setVideo] = useState(true)
