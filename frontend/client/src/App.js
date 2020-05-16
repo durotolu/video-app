@@ -25,7 +25,27 @@ function App() {
 
       // used to initialize a peer
       function initPeer(type) {
-        let peer = new Peer({ initiator: (type === 'init') ? true : false, stream: stream, trickle: false })
+        let peer = new Peer({
+          initiator: (type === 'init') ? true : false,
+          stream: stream,
+          trickle: true,
+          config: {
+            iceServers: [
+              { urls: 'stun:stun.l.google.com:19302' },
+              { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
+              { url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo' },
+              { 'url': 'turn:192.158.29.39:3478?transport=udp',
+                'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                'username': '28224511:1379330808'
+              },
+              {
+                'url': 'turn:192.158.29.39:3478?transport=tcp',
+                'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+                'username': '28224511:1379330808'
+              }
+            ]
+          }
+        })
         peer.on('stream', function (peerStream) {
           createVideo(peerStream)
         })
