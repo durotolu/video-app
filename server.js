@@ -32,7 +32,7 @@ io.on('connection', function(socket) {
 function disconnect() {
   if(clients > 0) {
     clients--
-    // this.broadcast("RemoveVideo")
+    this.broadcast("RemoveVideo")
   }
 }
 
