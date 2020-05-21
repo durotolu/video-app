@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Route } from 'react-router-dom';
 
 import io from 'socket.io-client';
 import Peer from 'simple-peer';
@@ -7,8 +6,10 @@ import styled from 'styled-components';
 
 import logo from '../logo.svg';
 import '../App.css';
+import Dashboard from './Dashboard'
 
-function Call() {
+function Call(props) {
+  debugger
   const socket = io()
 
   let streamDataREf = useRef()
