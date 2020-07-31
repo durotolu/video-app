@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Route } from "react-router-dom";
 import { AiFillCaretRight } from 'react-icons/ai'
+import { v4 as uuidV4} from 'uuid'
 
 import Call from './Call'
 
@@ -14,7 +15,7 @@ function Dashboard({ handleChange }) {
       <div>
         <button onClick={() => createInput ? setCreateInput(false) : setCreateInput(true)}>create room</button>
         <input onChange={handleChange} placeholder='enter id for new room' hidden={createInput} />
-        <Link to="/call" hidden={createInput}><AiFillCaretRight /></Link>
+        <Link to={`/call/${uuidV4()}`} hidden={createInput}><AiFillCaretRight /></Link>
       </div>
       <div>
         <button onClick={() => joinInput ? setJoinInput(false) : setJoinInput(true)}>join room</button>

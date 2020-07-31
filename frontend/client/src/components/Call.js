@@ -6,11 +6,11 @@ import styled from 'styled-components';
 
 import logo from '../logo.svg';
 import '../App.css';
-import Dashboard from './Dashboard'
+import Dashboard from './Dashboard';
 
 function Call(props) {
   debugger
-  const socket = io()
+  const socket = io('http://localhost:4000/')
 
   let streamDataREf = useRef()
   let peerStreamDataRef = useRef()

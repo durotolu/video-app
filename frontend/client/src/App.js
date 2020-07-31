@@ -29,7 +29,7 @@ function App() {
         <Route exact path="/" render={props =>
           <Dashboard {...props}
             handleChange={handleChange} />} />
-        <Route exact path="/call" render={props => <Call {...props} inputFeild={inputFeild} />} />
+        <Route path="/call" render={props => <Call {...props} inputFeild={inputFeild} />} />
       </div>
     </div>
   );
