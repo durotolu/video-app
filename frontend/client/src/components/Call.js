@@ -9,6 +9,7 @@ import '../App.css';
 import Dashboard from './Dashboard';
 
 function Call(props) {
+  console.log(props.roomId, 12)
   debugger
   const socket = io('http://localhost:4000/')
 
@@ -21,7 +22,7 @@ function Call(props) {
     // get stream
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then(stream => {
-        socket.emit('NewClient');
+        socket.emit('NewClient', props.roomId, 10);
 
         streamDataREf.current.srcObject = stream
 

@@ -17,10 +17,15 @@ function App() {
   const [createInput, setCreateInput] = useState(true)
   const [joinInput, setJoinInput] = useState(true)
   const [inputFeild, setInputField] = useState('')
+  const [roomId, setRoomId] = useState('')
 
   const handleChange = (e) => {
     setInputField(e.target.value)
     console.log(inputFeild)
+  }
+
+  const handleRoomUrl = (uniqueRoomId) => {
+    console.log(uniqueRoomId)
   }
 
   return (
@@ -28,8 +33,12 @@ function App() {
       <div className="App-header">
         <Route exact path="/" render={props =>
           <Dashboard {...props}
-            handleChange={handleChange} />} />
-        <Route path="/call" render={props => <Call {...props} inputFeild={inputFeild} />} />
+            createInput={createInput}
+            roomId={roomId}
+            setRoomId={setRoomId}
+            handleChange={handleChange}
+            handleRoomUrl={handleRoomUrl} />} />
+        <Route path="/call" render={props => <Call {...props} inputFeild={inputFeild} roomId={roomId} />} />
       </div>
     </div>
   );
