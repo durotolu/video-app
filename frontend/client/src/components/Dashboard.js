@@ -5,7 +5,7 @@ import { v4 as uuidV4 } from 'uuid'
 
 import Call from './Call'
 
-function Dashboard({ handleChange, handleRoomUrl, roomId, setRoomId }) {
+function Dashboard({ handleChange, handleRoomUrl, roomId, setRoomId, inputFeild }) {
   const [createInput, setCreateInput] = useState(true)
   const [joinInput, setJoinInput] = useState(true)
 
@@ -31,7 +31,7 @@ function Dashboard({ handleChange, handleRoomUrl, roomId, setRoomId }) {
       <div>
         <button onClick={() => joinInput ? setJoinInput(false) : setJoinInput(true)}>join room</button>
         <input onChange={handleChange} placeholder='enter id for new room' hidden={joinInput} />
-        <Link hidden={joinInput}><AiFillCaretRight /></Link>
+        <Link to={`/call/${inputFeild}`} hidden={joinInput}><AiFillCaretRight /></Link>
       </div>
     </div>
   )

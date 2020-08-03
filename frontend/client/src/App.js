@@ -37,8 +37,9 @@ function App() {
             roomId={roomId}
             setRoomId={setRoomId}
             handleChange={handleChange}
-            handleRoomUrl={handleRoomUrl} />} />
-        <Route path="/call" render={props => <Call {...props} inputFeild={inputFeild} roomId={roomId} />} />
+            handleRoomUrl={handleRoomUrl}
+            inputFeild={inputFeild} />} />
+        <Route path="/call" render={props => <Call {...props} inputFeild={inputFeild} roomId={inputFeild || roomId} />} />
       </div>
     </div>
   );
