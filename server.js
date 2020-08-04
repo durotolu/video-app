@@ -6,12 +6,11 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT;
 
-// app.use(express.static(__dirname + '/frontend/client/build'))
-let clients = 0
+app.use(express.static(__dirname + '/frontend/client/build'))
 
-// app.get('/', (req, res) => {
-//   res.sendFile(__dirname + '/frontend/client/public/index.html')
-// });
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/frontend/client/public/index.html')
+});
 
 io.on('connection', function (socket) {
   socket.on("joinRoom", function (roomId, userId) {
