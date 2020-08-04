@@ -13,38 +13,16 @@ let clients = 0
 //   res.sendFile(__dirname + '/frontend/client/public/index.html')
 // });
 
-io.on('connection', function(socket) {
-  socket.on("joinRoom", function(roomId, userId) {
+io.on('connection', function (socket) {
+  socket.on("joinRoom", function (roomId, userId) {
     console.log(roomId, userId)
     socket.join(roomId)
     socket.to(roomId).broadcast.emit('userConnected', userId)
-    // if(clients < 2) {
-    //   if(clients === 1) {
-    //     this.emit('CreatePeer')
-    //   }
-    // }
-    // else 
-    //   this.emit('SessionActive')
-    // clients++
+
+    socket.on('disconnect', () => {
+      socket.to(roomId).broadcast.emit('userDisconnected', userId)
+    })
   })
-  socket.on('Offer', sendOffer)
-  socket.on('Answer', sendAnswer)
-  socket.on('Disconnect', disconnect)
 })
-
-function disconnect() {
-  if(clients > 0) {
-    clients--
-    this.broadcast("RemoveVideo")
-  }
-}
-
-function sendOffer(offer) {
-  this.broadcast.emit('BackOffer', offer)
-}
-
-function sendAnswer(answer) {
-  this.broadcast.emit('BackAnswer', answer)
-}
 
 http.listen(port, () => console.log(`Active on localhost:${port}`))

@@ -14,56 +14,51 @@ function Call(props) {
 
   let streamDataREf = useRef()
   let peerStreamDataRef = useRef()
+  const peers = {}
 
-  
   useEffect(() => {
     const myPeer = new Peer()
     console.log(myPeer.call())
     myPeer.on('open', id => {
       socket.emit('joinRoom', props.roomId, myPeer.id);
     })
-    
+
     // get stream
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-    .then(stream => {
-      addVideoStream(streamDataREf, stream)
+      .then(stream => {
+        addVideoStream(streamDataREf, stream)
 
-      myPeer.on('call', call => {
-        call.answer(stream)
-        call.on('stream', userVideoStream => {
-          addVideoStream(peerStreamDataRef, userVideoStream)
+        myPeer.on('call', call => {
+          call.answer(stream)
+          call.on('stream', userVideoStream => {
+            addVideoStream(peerStreamDataRef, userVideoStream)
+          })
         })
-      })
-      
-      socket.on('userConnected', userId => {
-        connectToNewUser(userId, stream)
-      })
-      
-      function addVideoStream(videoRef, stream) {
-        videoRef.current.srcObject = stream
-      }
-    
-      function connectToNewUser(userId, stream) {
-        const call = myPeer.call(userId, stream)
-        call.on('stream', userVideoStream => {
-          addVideoStream(peerStreamDataRef, userVideoStream)
+
+        socket.on('userConnected', userId => {
+          connectToNewUser(userId, stream)
         })
-        call.on('close', () => {
-          //video.remove()
-          peerStreamDataRef = ''
+
+        socket.on('userDisconnected', userId => {
+          if (peers[userId]) peers[userId].close()
         })
-      }
-        function frontAnswer(userId) {
-          debugger
-          console.log(userId, 86)
-          // let peer = initPeer('notinit')
-          // peer.on('signal', (data) => {
-          //   socket.emit('Answer', data)
-          // })
-          // peer.signal(offer)
+
+        function addVideoStream(videoRef, stream) {
+          videoRef.current.srcObject = stream
         }
 
-        // socket.on('userConnected', frontAnswer)
+        function connectToNewUser(userId, stream) {
+          const call = myPeer.call(userId, stream)
+          call.on('stream', userVideoStream => {
+            addVideoStream(peerStreamDataRef, userVideoStream)
+          })
+          call.on('close', () => {
+            //video.remove()
+            peerStreamDataRef = ''
+          })
+
+          peers[userId] = call
+        }
       })
       .catch(err => {
         console.log('swag', err)
