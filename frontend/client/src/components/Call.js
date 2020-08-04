@@ -10,7 +10,7 @@ import '../App.css';
 import Dashboard from './Dashboard';
 
 function Call(props) {
-  const socket = io('http://localhost:4000/')
+  const socket = io()
 
   let streamDataREf = useRef()
   let peerStreamDataRef = useRef()
