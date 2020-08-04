@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import io from 'socket.io-client';
-import Peer from 'simple-peer';
+// import Peer from 'simple-peer';
+import Peer from 'peerjs';
 import styled from 'styled-components';
 
 import logo from '../logo.svg';
@@ -9,108 +10,60 @@ import '../App.css';
 import Dashboard from './Dashboard';
 
 function Call(props) {
-  console.log(props.roomId, 12)
-  debugger
   const socket = io('http://localhost:4000/')
 
   let streamDataREf = useRef()
   let peerStreamDataRef = useRef()
-  let client = {}
 
+  
   useEffect(() => {
-
+    const myPeer = new Peer()
+    console.log(myPeer.call())
+    myPeer.on('open', id => {
+      socket.emit('joinRoom', props.roomId, myPeer.id);
+    })
+    
     // get stream
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then(stream => {
-        socket.emit('NewClient', props.roomId, 10);
+    .then(stream => {
+      addVideoStream(streamDataREf, stream)
 
-        streamDataREf.current.srcObject = stream
-
-        // used to initialize a peer
-        function initPeer(type) {
-          let peer = new Peer({
-            initiator: (type === 'init') ? true : false,
-            stream: stream,
-            // trickle: true,
-            // config: {
-            //   iceServers: [
-            //     { urls: 'stun:stun.l.google.com:19302' },
-            //     { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
-            //     { 'url': 'turn:192.158.29.39:3478?transport=udp',
-            //       'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-            //       'username': '28224511:1379330808'
-            //     },
-            //     {
-            //       'url': 'turn:192.158.29.39:3478?transport=tcp',
-            //       'credential': 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-            //       'username': '28224511:1379330808'
-            //     }
-            //   ]
-            // }
-
-            // config: '{"rtcpMuxPolicy":"require","bundlePolicy":"max-bundle","iceServers":[{"urls":["stun:74.125.140.127:19302","stun:[2a00:1450:400c:c08::7f]:19302"]},{"urls":["turn:209.85.203.127:19305?transport=udp","turn:[2a00:1450:400b:c03::7f]:19305?transport=udp","turn:209.85.203.127:19305?transport=tcp","turn:[2a00:1450:400b:c03::7f]:19305?transport=tcp"],"username":"CLXnjvYFEgZZTdGSvSQYzc/s6OMTIICjBQ","credential":"80aSa59oAHNC2ZB7qxekT4vVmWQ=","maxRateKbps":"8000"}],"certificates":[{}]}';
-          })
-          peer.on('error', function (err) {
-            console.log(err)
-          })
-          peer.on('stream', function (peerStream) {
-            createVideo(peerStream)
-          })
-          peer.on('close', function () {
-            peerStreamDataRef.connect.srcObject = null
-            // socket.emit('Disconnect')
-            peer.destroy()
-          })
-          return peer
-        }
-
-        function removeVideo() {
-          peerStreamDataRef.connect.srcObject = null
-          socket.emit('Disconnect')
-        }
-
-        // create peer of type init
-        function makePeer() {
-          client.gotAnswer = false
-          let peer = initPeer('init')
-          peer.on('signal', function (data) {
-            if (!client.gotAnswer) {
-              socket.emit('Offer', data)
-            }
-          })
-          client.peer = peer
-        }
-
-        // for peer of type not init
-        function frontAnswer(offer) {
-          let peer = initPeer('notinit')
-          peer.on('signal', (data) => {
-            socket.emit('Answer', data)
-          })
-          peer.signal(offer)
-        }
-
-        function signalAnswer(answer) {
-          client.gotAnswer = true
-          let peer = client.peer
-          peer.signal(answer)
-        }
-
-        function createVideo(stream) {
+      myPeer.on('call', call => {
+        call.answer(stream)
+        call.on('stream', userVideoStream => {
+          addVideoStream(peerStreamDataRef, userVideoStream)
+        })
+      })
+      
+      socket.on('userConnected', userId => {
+        connectToNewUser(userId, stream)
+      })
+      
+      function addVideoStream(videoRef, stream) {
+        videoRef.current.srcObject = stream
+      }
+    
+      function connectToNewUser(userId, stream) {
+        const call = myPeer.call(userId, stream)
+        call.on('stream', userVideoStream => {
+          addVideoStream(peerStreamDataRef, userVideoStream)
+        })
+        call.on('close', () => {
+          //video.remove()
+          peerStreamDataRef = ''
+        })
+      }
+        function frontAnswer(userId) {
           debugger
-          peerStreamDataRef.current.srcObject = stream
+          console.log(userId, 86)
+          // let peer = initPeer('notinit')
+          // peer.on('signal', (data) => {
+          //   socket.emit('Answer', data)
+          // })
+          // peer.signal(offer)
         }
 
-        function sessionActive() {
-          console.log('session active. please come back later')
-        }
-
-        socket.on('BackOffer', frontAnswer)
-        socket.on('BackAnswer', signalAnswer)
-        socket.on('SessionActive', sessionActive)
-        socket.on('CreatePeer', makePeer)
-        socket.on('RemoveVideo', removeVideo)
-
+        // socket.on('userConnected', frontAnswer)
       })
       .catch(err => {
         console.log('swag', err)
