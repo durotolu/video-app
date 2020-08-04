@@ -24,10 +24,6 @@ function App() {
     console.log(inputFeild)
   }
 
-  const handleRoomUrl = (uniqueRoomId) => {
-    console.log(uniqueRoomId)
-  }
-
   return (
     <div className="App">
       <div className="App-header">
@@ -37,7 +33,6 @@ function App() {
             roomId={roomId}
             setRoomId={setRoomId}
             handleChange={handleChange}
-            handleRoomUrl={handleRoomUrl}
             inputFeild={inputFeild} />} />
         <Route path="/call" render={props => <Call {...props} inputFeild={inputFeild} roomId={inputFeild || roomId} />} />
       </div>
